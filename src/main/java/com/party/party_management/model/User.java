@@ -45,5 +45,4 @@ public class User {
     @Column(columnDefinition = "text[]")
     private String[] tags;
 
-    // Getters e Setters
 }

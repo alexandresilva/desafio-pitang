@@ -27,4 +27,10 @@ public class UserResponse {
 
     public UserResponse(Long id, String username, String email, Set<Role> role) {
     }
+
+    public UserResponse(Long id, String username, String email, String fullName, Set<Role> role) {
+    }
+
+    public UserResponse(Long id, String username, String email, String fullName, Set<Role> role, Instant createdAt) {
+    }
 }

@@ -1,9 +1,11 @@
 package com.party.party_management.service.impl;
 
+import com.party.party_management.exception.ResourceNotFoundException;
 import com.party.party_management.model.User;
 import com.party.party_management.repository.UserRepository;
 import com.party.party_management.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
     }
 
     @Override
@@ -34,13 +36,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Long id, User user) {
-        return null;
+    public User updateUser(User user) {
+        return userRepository.save(user);
     }
 
     @Override
+    @Transactional
     public void deleteUser(Long id) {
-
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+        userRepository.delete(user);
     }
 
 }
