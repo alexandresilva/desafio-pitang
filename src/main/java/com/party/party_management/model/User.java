@@ -45,4 +45,6 @@ public class User {
     @Column(columnDefinition = "text[]")
     private String[] tags;
 
+    public User(String username, String email, String fullName, String encode, String s) {
+    }
 }

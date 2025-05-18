@@ -1,5 +1,6 @@
 package com.party.party_management.security;
 
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -7,9 +8,16 @@ import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
 
+    @Getter
     private Long id;
+
+    @Getter
     private String email;
+
+    @Getter
     private final String username;
+
+    @Getter
     private final String password;
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -23,16 +31,6 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
     }
 
     // Construtor, getters e métodos obrigatórios do UserDetails

@@ -1,0 +1,8 @@
+spring:
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    user: postgres
+    password: admin@123
+    url: jdbc:postgresql://localhost:5433/eventdb

@@ -28,7 +28,6 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<User> users = userService.findAllUsers();
-        // Conversão para DTO
         List<UserResponse> response = users.stream()
                 .map(user -> convertToDto(user))
                 .toList();
@@ -81,6 +80,7 @@ public class UserController {
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN') or #id == principal.id")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
