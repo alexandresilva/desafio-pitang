@@ -11,24 +11,25 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public record EventRequest(
+public class EventRequest {
+
         @NotBlank(message = "Título é obrigatório")
         @Size(max = 100, message = "Título deve ter no máximo 100 caracteres")
-        String title,
+        private String title;
 
         @Size(max = 500, message = "Descrição deve ter no máximo 500 caracteres")
-        String description,
+        private String description;
 
         @NotBlank(message = "Localização é obrigatória")
-        String location,
+        private String location;
 
         @Future(message = "Data de início deve ser no futuro")
         @NotNull(message = "Data de início é obrigatória")
-        LocalDateTime startDateTime,
+        private LocalDateTime startDateTime;
 
         @Future(message = "Data de término deve ser no futuro")
-        LocalDateTime endDateTime,
+        private LocalDateTime endDateTime;
 
         @NotNull(message = "ID do organizador é obrigatório")
-        Long organizerId
-) {}
+        private Long organizerId;
+}

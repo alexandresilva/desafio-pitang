@@ -52,20 +52,20 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public EventResponse createEvent(EventRequest request) {
-        if (request.endDateTime() != null &&
-                request.endDateTime().isBefore(request.startDateTime())) {
+        if (request.getEndDateTime() != null &&
+                request.getEndDateTime().isBefore(request.getEndDateTime())) {
             throw new IllegalArgumentException("Data de término deve ser após a data de início");
         }
 
-        User organizer = userRepository.findById(request.organizerId())
+        User organizer = userRepository.findById(request.getOrganizerId())
                 .orElseThrow(() -> new ResourceNotFoundException("Organizador não encontrado"));
 
         Event event = new Event();
-        event.setTitle(request.title());
-        event.setDescription(request.description());
-        event.setLocation(request.location());
-        event.setStartDate(request.startDateTime());
-        event.setEndDate(request.endDateTime());
+        event.setTitle(request.getTitle());
+        event.setDescription(request.getDescription());
+        event.setLocation(request.getLocation());
+        event.setStartDate(request.getStartDateTime());
+        event.setEndDate(request.getEndDateTime());
         event.setOrganizer(organizer);
         event.setCreatedAt(LocalDateTime.now());
 

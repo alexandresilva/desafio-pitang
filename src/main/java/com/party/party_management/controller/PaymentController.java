@@ -1,34 +1,71 @@
 package com.party.party_management.controller;
 
+import com.party.party_management.dto.PaymentRequest;
+import com.party.party_management.dto.PaymentResponse;
+import com.party.party_management.security.UserDetailsImpl;
+import com.party.party_management.service.PaymentService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/payments")
 public class PaymentController {
 
+    private final PaymentService paymentService;
+
+    public PaymentController(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
+
     @GetMapping
-    public ResponseEntity<List<PaymentResponse>> getAllPayments() {
-        // Listar pagamentos
+    public ResponseEntity<List<PaymentResponse>> getAllPayments(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) Long eventId,
+            @RequestParam(required = false) Long userId) {
+
+        List<PaymentResponse> payments = paymentService.getAllPayments(status, eventId, userId);
+        return ResponseEntity.ok(payments);
     }
 
     @PostMapping
-    public ResponseEntity<PaymentResponse> createPayment(@RequestBody PaymentRequest request) {
-        // Criar pagamento
+    public ResponseEntity<PaymentResponse> createPayment(
+            @Valid @RequestBody PaymentRequest request,
+            Authentication authentication) {
+
+        // Verifica se o usuário autenticado é o mesmo do pagamento
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if (!userDetails.getId().equals(request.userId())) {
+            throw new AccessDeniedException("Você só pode criar pagamentos para sua própria conta");
+        }
+
+        PaymentResponse response = paymentService.createPayment(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PaymentResponse> getPaymentById(@PathVariable Long id) {
-        // Buscar pagamento
+        PaymentResponse payment = paymentService.findById(id);
+        return ResponseEntity.ok(payment); // Retorna 200 OK com o pagamento
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PaymentResponse> updatePayment(@PathVariable Long id, @RequestBody PaymentRequest request) {
-        // Atualizar
+    public ResponseEntity<PaymentResponse> updatePayment(
+            @PathVariable Long id,
+            @RequestBody PaymentRequest request
+    ) {
+        PaymentResponse updatedPayment = paymentService.update(id, request);
+        return ResponseEntity.ok(updatedPayment); // Retorna 200 OK com o pagamento atualizado
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> cancelPayment(@PathVariable Long id) {
-        // Cancelar
+        paymentService.cancel(id);
+        return ResponseEntity.noContent().build(); // Retorna 204 No Content (sucesso sem corpo)
     }
 }

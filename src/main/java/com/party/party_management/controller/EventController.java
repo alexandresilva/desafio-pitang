@@ -64,7 +64,7 @@ public class EventController {
 
         // Verifica se o usuário autenticado é o organizador
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        if (!userDetails.getId().equals(request.organizerId())) {
+        if (!userDetails.getId().equals(request.getOrganizerId())) {
             throw new AccessDeniedException("Você só pode criar eventos como organizador");
         }
 
