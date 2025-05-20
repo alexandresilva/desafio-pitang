@@ -1,15 +1,14 @@
 package com.party.party_management.controller;
 
-import com.party.party_management.dto.JwtResponse;
-import com.party.party_management.dto.LoginRequest;
-import com.party.party_management.dto.SignupRequest;
+import com.party.party_management.dto.JwtResponseDTO;
+import com.party.party_management.dto.LoginRequestDTO;
+import com.party.party_management.dto.SignupRequestDTO;
 import com.party.party_management.model.User;
 import com.party.party_management.repository.UserRepository;
 import com.party.party_management.security.JwtUtils;
 import com.party.party_management.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -33,7 +34,7 @@ public class AuthController {
     private final JwtUtils jwtUtils;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequestDTO signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
@@ -60,11 +61,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestDTO loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.usernameOrEmail(),
-                        loginRequest.password()
+                        loginRequest.getUsernameOrEmail(),
+                        loginRequest.getPassword()
                 )
         );
 
@@ -73,14 +74,14 @@ public class AuthController {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        return ResponseEntity.ok(new JwtResponse(
+        return ResponseEntity.ok(new JwtResponseDTO(
                 jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
                 userDetails.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
-                        .toList()
+                        .collect(Collectors.toList())
         ));
     }
 }

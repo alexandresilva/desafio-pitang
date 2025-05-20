@@ -18,10 +18,8 @@ public class MockNotificationService implements NotificationService {
 
     @Override
     public void sendPaymentConfirmation(String email, String eventTitle, BigDecimal amount) {
-        log.info("""
-            [Mock Email] Enviando confirmação para: {}
-            Evento: {}
-            Valor: {}
-            """, email, eventTitle, amount);
+        log.info("[Mock Email] Enviando confirmação para: {}" +
+                "Evento: {} " +
+                "Valor: {}", email, eventTitle, amount);
     }
 }

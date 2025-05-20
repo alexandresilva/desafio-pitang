@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class SignupRequest {
+public class SignupRequestDTO {
     @NotBlank(message = "Username é obrigatório")
     @Size(min = 3, max = 20, message = "Username deve ter entre 3 e 20 caracteres")
     private String username;

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class EventRequest {
+public class EventRequestDTO {
 
         @NotBlank(message = "Título é obrigatório")
         @Size(max = 100, message = "Título deve ter no máximo 100 caracteres")

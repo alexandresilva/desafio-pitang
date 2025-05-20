@@ -1,8 +1,8 @@
 package com.party.party_management.service.impl;
 
-import com.party.party_management.dto.EventRequest;
-import com.party.party_management.dto.EventResponse;
-import com.party.party_management.dto.EventUpdateRequest;
+import com.party.party_management.dto.EventRequestDTO;
+import com.party.party_management.dto.EventResponseDTO;
+import com.party.party_management.dto.EventUpdateRequestDTO;
 import com.party.party_management.exception.ResourceNotFoundException;
 import com.party.party_management.model.Event;
 import com.party.party_management.model.User;
@@ -37,7 +37,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Page<EventResponse> getAllEvents(int page, int size) {
+    public Page<EventResponseDTO> getAllEvents(int page, int size) {
         Page<Event> events = eventRepository.findAll(
                 PageRequest.of(page, size, Sort.by("startDateTime").ascending())
         );
@@ -45,13 +45,13 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Page<EventResponse> getUpcomingEvents(int page, int size) {
+    public Page<EventResponseDTO> getUpcomingEvents(int page, int size) {
         return null;
     }
 
     @Override
     @Transactional
-    public EventResponse createEvent(EventRequest request) {
+    public EventResponseDTO createEvent(EventRequestDTO request) {
         if (request.getEndDateTime() != null &&
                 request.getEndDateTime().isBefore(request.getEndDateTime())) {
             throw new IllegalArgumentException("Data de término deve ser após a data de início");
@@ -74,8 +74,8 @@ public class EventServiceImpl implements EventService {
         return convertToDto(savedEvent);
     }
 
-    private EventResponse convertToDto(Event event) {
-        return new EventResponse(
+    private EventResponseDTO convertToDto(Event event) {
+        return new EventResponseDTO(
                 event.getId(),
                 event.getTitle(),
                 event.getDescription(),
@@ -83,14 +83,11 @@ public class EventServiceImpl implements EventService {
                 event.getStartDate(),
                 event.getEndDate(),
                 event.getOrganizer().getId(),
-                event.getOrganizer().getUsername(),
-                event.getEndDate() != null && event.getEndDate().isBefore(LocalDateTime.now()),
-                event.getStartDate().isBefore(LocalDateTime.now()) &&
-                        (event.getEndDate() == null || event.getEndDate().isAfter(LocalDateTime.now()))
+                event.getOrganizer().getUsername()
         );
     }
 
-    public EventResponse getEventById(Long id) {
+    public EventResponseDTO getEventById(Long id) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Evento com id [" + id +"] não encontrado"));
 
@@ -99,7 +96,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventResponse updateEvent(Long eventId, EventUpdateRequest request, Long organizerId) {
+    public EventResponseDTO updateEvent(Long eventId, EventUpdateRequestDTO request, Long organizerId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Evento não encontrado"));
 
@@ -107,23 +104,23 @@ public class EventServiceImpl implements EventService {
             throw new AccessDeniedException("Apenas o organizador pode atualizar o evento");
         }
 
-        if (request.title() != null) {
-            event.setTitle(request.title());
+        if (request.getTitle() != null) {
+            event.setTitle(request.getTitle());
         }
-        if (request.description() != null) {
-            event.setDescription(request.description());
+        if (request.getDescription() != null) {
+            event.setDescription(request.getDescription());
         }
-        if (request.location() != null) {
-            event.setLocation(request.location());
+        if (request.getLocation() != null) {
+            event.setLocation(request.getLocation());
         }
-        if (request.startDate() != null) {
-            event.setStartDate(request.startDate());
+        if (request.getStartDate() != null) {
+            event.setStartDate(request.getStartDate());
         }
-        if (request.endDate() != null) {
-            if (request.endDate().isBefore(event.getStartDate())) {
+        if (request.getEndDate() != null) {
+            if (request.getEndDate().isBefore(event.getStartDate())) {
                 throw new IllegalArgumentException("Data de término deve ser após a data de início");
             }
-            event.setEndDate(request.endDate());
+            event.setEndDate(request.getEndDate());
         }
 
         Event updatedEvent = eventRepository.save(event);

@@ -1,6 +1,6 @@
 package com.party.party_management.component;
 
-import com.party.party_management.dto.UserResponse;
+import com.party.party_management.dto.UserResponseDTO;
 import com.party.party_management.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -9,5 +9,5 @@ import org.mapstruct.factory.Mappers;
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    UserResponse toDto(User user);
+    UserResponseDTO toDto(User user);
 }

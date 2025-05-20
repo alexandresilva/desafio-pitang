@@ -5,14 +5,7 @@
 Criar uma aplicação de gerenciamento de festas de formatura que deve utilizar tecnologias do
 mundo Java. A aplicação deve ser escalável, flexível e tolerante a falhas.
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/3.4.5/maven-plugin)
-* [Create an OCI image](https://docs.spring.io/spring-boot/3.4.5/maven-plugin/build-image.html)
-* [Spring Data JPA](https://docs.spring.io/spring-boot/3.4.5/reference/data/sql.html#data.sql.jpa-and-spring-data)
-* [Spring Boot DevTools](https://docs.spring.io/spring-boot/3.4.5/reference/using/devtools.html)
-* [OAuth2 Authorization Server](https://docs.spring.io/spring-boot/3.4.5/reference/web/spring-security.html#web.security.oauth2.authorization-server)
-* [Spring Security](https://docs.spring.io/spring-boot/3.4.5/reference/web/spring-security.html)
-* [Spring Web](https://docs.spring.io/spring-boot/3.4.5/reference/web/servlet.html)
+* [Download Java 17](https://download.oracle.com/java/17/archive/jdk-17.0.12_windows-x64_bin.exe)
 
 ### Guides
 

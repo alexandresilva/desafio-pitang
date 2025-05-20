@@ -1,6 +1,6 @@
 package com.party.party_management.controller;
 
-import com.party.party_management.dto.UserResponse;
+import com.party.party_management.dto.UserResponseDTO;
 import com.party.party_management.security.UserDetailsImpl;
 import com.party.party_management.service.AttendanceService;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +37,8 @@ public class AttendanceController {
     }
 
     @GetMapping("/attendees")
-    public ResponseEntity<List<UserResponse>> getAttendees(@PathVariable Long eventId) {
-        List<UserResponse> attendees = attendanceService.getEventAttendees(eventId);
+    public ResponseEntity<List<UserResponseDTO>> getAttendees(@PathVariable Long eventId) {
+        List<UserResponseDTO> attendees = attendanceService.getEventAttendees(eventId);
         return ResponseEntity.ok(attendees);
     }
 }

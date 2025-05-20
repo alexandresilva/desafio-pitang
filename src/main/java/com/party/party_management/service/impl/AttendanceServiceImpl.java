@@ -1,7 +1,7 @@
 package com.party.party_management.service.impl;
 
 import com.party.party_management.component.UserMapper;
-import com.party.party_management.dto.UserResponse;
+import com.party.party_management.dto.UserResponseDTO;
 import com.party.party_management.exception.ConflictException;
 import com.party.party_management.exception.ResourceNotFoundException;
 import com.party.party_management.model.Attendance;
@@ -63,7 +63,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public List<UserResponse> getEventAttendees(Long eventId) {
+    public List<UserResponseDTO> getEventAttendees(Long eventId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Evento não encontrado"));
 

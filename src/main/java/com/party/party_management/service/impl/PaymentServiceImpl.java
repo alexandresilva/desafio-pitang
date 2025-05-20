@@ -1,8 +1,8 @@
 package com.party.party_management.service.impl;
 
 import com.party.party_management.component.PaymentMapper;
-import com.party.party_management.dto.PaymentRequest;
-import com.party.party_management.dto.PaymentResponse;
+import com.party.party_management.dto.PaymentRequestDTO;
+import com.party.party_management.dto.PaymentResponseDTO;
 import com.party.party_management.enumerate.PaymentStatus;
 import com.party.party_management.exception.ResourceNotFoundException;
 import com.party.party_management.model.Event;
@@ -41,7 +41,7 @@ public class PaymentServiceImpl {
     }
 
     @Cacheable(value = "payments", key = "{#status, #eventId, #userId}")
-    public List<PaymentResponse> getAllPayments(String status, Long eventId, Long userId) {
+    public List<PaymentResponseDTO> getAllPayments(String status, Long eventId, Long userId) {
         Specification<Payment> spec = Specification.where(null);
 
         if (status != null) {
@@ -64,8 +64,8 @@ public class PaymentServiceImpl {
                 .toList();
     }
 
-    private PaymentResponse convertToDto(Payment payment) {
-        return new PaymentResponse(
+    private PaymentResponseDTO convertToDto(Payment payment) {
+        return new PaymentResponseDTO(
                 payment.getId(),
                 payment.getTransactionId(),
                 payment.getAmount(),
@@ -80,24 +80,24 @@ public class PaymentServiceImpl {
     }
 
     @Transactional
-    public PaymentResponse createPayment(PaymentRequest request) {
+    public PaymentResponseDTO createPayment(PaymentRequestDTO request) {
         // 1. Validação adicional
-        if (paymentRepository.existsByTransactionId(request.transactionId())) {
+        if (paymentRepository.existsByTransactionId(request.getTransactionId())) {
             throw new IllegalArgumentException("Transaction ID já existe");
         }
 
         // 2. Busca as entidades relacionadas
-        Event event = eventRepository.findById(request.eventId())
+        Event event = eventRepository.findById(request.getEventId())
                 .orElseThrow(() -> new ResourceNotFoundException("Evento não encontrado"));
 
-        User user = userRepository.findById(request.userId())
+        User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
         // 3. Cria o pagamento
         Payment payment = new Payment();
-        payment.setTransactionId(request.transactionId());
-        payment.setAmount(request.amount());
-        payment.setPaymentMethod(request.paymentMethod());
+        payment.setTransactionId(request.getTransactionId());
+        payment.setAmount(request.getAmount());
+        payment.setPaymentMethod(request.getPaymentMethod());
         payment.setPaymentDate(LocalDateTime.now());
         payment.setStatus(PaymentStatus.PENDING); // Status inicial
         payment.setEvent(event);
@@ -113,13 +113,13 @@ public class PaymentServiceImpl {
         return convertToDto(savedPayment);
     }
 
-    public PaymentResponse findById(Long id) {
+    public PaymentResponseDTO findById(Long id) {
         Payment payment = paymentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Payment not found"));
         return paymentMapper.toResponse(payment);
     }
 
-    public PaymentResponse update(Long id, PaymentRequest request) {
+    public PaymentResponseDTO update(Long id, PaymentRequestDTO request) {
         Payment payment = paymentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Payment not found"));
 

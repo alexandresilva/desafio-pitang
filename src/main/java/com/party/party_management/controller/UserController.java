@@ -1,7 +1,7 @@
 package com.party.party_management.controller;
 
-import com.party.party_management.dto.UserResponse;
-import com.party.party_management.dto.UserUpdateRequest;
+import com.party.party_management.dto.UserResponseDTO;
+import com.party.party_management.dto.UserUpdateRequestDTO;
 import com.party.party_management.model.User;
 import com.party.party_management.service.UserService;
 import jakarta.validation.Valid;
@@ -26,16 +26,16 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         List<User> users = userService.findAllUsers();
-        List<UserResponse> response = users.stream()
+        List<UserResponseDTO> response = users.stream()
                 .map(user -> convertToDto(user))
                 .toList();
         return ResponseEntity.ok(response);
     }
 
-    private UserResponse convertToDto(User user) {
-        return new UserResponse(
+    private UserResponseDTO convertToDto(User user) {
+        return new UserResponseDTO(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
@@ -44,16 +44,16 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
         User user = userService.findById(id);
         return ResponseEntity.ok(convertToUserResponse(user));
     }
 
     @PreAuthorize("#id == principal.id or hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(
+    public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable Long id,
-            @Valid @RequestBody UserUpdateRequest request) {
+            @Valid @RequestBody UserUpdateRequestDTO request) {
 
         User user = userService.findById(id);
 
@@ -69,8 +69,8 @@ public class UserController {
         return ResponseEntity.ok(convertToUserResponse(updatedUser));
     }
 
-    private UserResponse convertToUserResponse(User user) {
-        return new UserResponse(
+    private UserResponseDTO convertToUserResponse(User user) {
+        return new UserResponseDTO(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),

@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.Set;
 
 @Getter
-public class UserResponse {
+public class UserResponseDTO {
     private Long id;
     private String username;
     private String email;
@@ -16,7 +16,7 @@ public class UserResponse {
     private Instant createdAt;
 
     // Construtor
-    public UserResponse(Long id, String username, String email, String fullName, String role, Instant createdAt) {
+    public UserResponseDTO(Long id, String username, String email, String fullName, String role, Instant createdAt) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -25,12 +25,12 @@ public class UserResponse {
         this.createdAt = createdAt;
     }
 
-    public UserResponse(Long id, String username, String email, Set<Role> role) {
+    public UserResponseDTO(Long id, String username, String email, Set<Role> role) {
     }
 
-    public UserResponse(Long id, String username, String email, String fullName, Set<Role> role) {
+    public UserResponseDTO(Long id, String username, String email, String fullName, Set<Role> role) {
     }
 
-    public UserResponse(Long id, String username, String email, String fullName, Set<Role> role, Instant createdAt) {
+    public UserResponseDTO(Long id, String username, String email, String fullName, Set<Role> role, Instant createdAt) {
     }
 }

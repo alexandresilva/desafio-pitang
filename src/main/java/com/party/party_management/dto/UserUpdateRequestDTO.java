@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserUpdateRequest {
+public class UserUpdateRequestDTO {
 
     @NotBlank(message = "Nome completo é obrigatório")
     @Size(min = 3, max = 100)
