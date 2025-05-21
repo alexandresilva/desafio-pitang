@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -40,23 +41,24 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers(
+                                "/api/v1/auth/**",
+                                "/api/v1/events/*/attend",
+                                "/api/v1/payments/**",
+                                "/api/v1/users/**",
+                                "/api/v1/auth/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs"
+                        ).permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/events/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/v1/events/**/attend").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/events/**/attend").authenticated()
-                        .requestMatchers("/swagger-ui.html",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/v3/api-docs",
-                                "/swagger-resources/**",
-                                "/api/swagger-ui.html",
-                                "/api/swagger-ui/**",
-                                "/api/v3/api-docs/**"
-                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -64,4 +66,5 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 }

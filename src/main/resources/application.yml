@@ -3,7 +3,7 @@ server:
 
 app:
   jwt:
-    secret: YDXmzA0pfWGr5GxizbA7NdGQrusADUvZm9dDw8jzqpo= # usar comando "openssl rand -base64 32" para gerar token
+    secret: YDXmzA0pfWGr5GxizbA7NdGQrusADUvZm9dDw8jzqpo= # usar comando 'openssl rand -base64 32' para gerar token
     expirationMs: 86400000 # 24 horas em milissegundos
 
 spring:

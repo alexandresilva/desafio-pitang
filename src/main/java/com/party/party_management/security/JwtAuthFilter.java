@@ -10,10 +10,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 // Outros imports necessários...
 
 @Component
@@ -25,9 +27,31 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    private static final List<String> PUBLIC_URLS = List.of(
+            "/api/v1/auth/",
+            "/v3/api-docs",
+            "/v3/api-docs/",
+            "/v3/api-docs/**",
+            "/swagger-ui.html",
+            "/swagger-ui/**"
+    );
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+        String path = request.getServletPath();
+        AntPathMatcher matcher = new AntPathMatcher();
+
+        // Ignora URLs públicas
+        for (String pattern : PUBLIC_URLS) {
+            if (matcher.match(pattern, path)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+        }
+
+        // Processa JWT normalmente
         try {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
@@ -39,8 +63,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
+            logger.error("Cannot set user authentication: {"+e.getMessage()+"}");
         }
+
         filterChain.doFilter(request, response);
     }
 
