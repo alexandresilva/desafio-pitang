@@ -6,14 +6,29 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginRequestDTO {
-        @NotBlank(message = "Username ou email é obrigatório")
-        private String usernameOrEmail;
+	@NotBlank(message = "Username ou email é obrigatório")
+	private String usernameOrEmail;
 
-        @NotBlank(message = "Senha é obrigatória")
-        private String password;
+	@NotBlank(message = "Senha é obrigatória")
+	private String password;
+
+	public String getUsernameOrEmail() {
+		return usernameOrEmail;
+	}
+
+	public void setUsernameOrEmail(String usernameOrEmail) {
+		this.usernameOrEmail = usernameOrEmail;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }

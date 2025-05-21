@@ -11,7 +11,6 @@ import com.party.party_management.repository.AttendanceRepository;
 import com.party.party_management.repository.EventRepository;
 import com.party.party_management.repository.UserRepository;
 import com.party.party_management.service.AttendanceService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,13 +19,20 @@ import java.util.List;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class AttendanceServiceImpl implements AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+
+    public AttendanceServiceImpl(AttendanceRepository attendanceRepository, EventRepository eventRepository,
+                                 UserRepository userRepository, UserMapper userMapper){
+        this.attendanceRepository = attendanceRepository;
+        this.eventRepository = eventRepository;
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+    }
 
     @Override
     public void registerAttendance(Long eventId, Long userId) {

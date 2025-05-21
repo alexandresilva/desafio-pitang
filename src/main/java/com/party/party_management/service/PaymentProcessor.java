@@ -2,20 +2,24 @@ package com.party.party_management.service;
 
 import com.party.party_management.enumerate.PaymentStatus;
 import com.party.party_management.model.Payment;
-import com.party.party_management.repository.EventRepository;
 import com.party.party_management.repository.PaymentRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import com.party.party_management.service.mock.MockNotificationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class PaymentProcessor {
+
+    private static final Logger log = LoggerFactory.getLogger(MockNotificationService.class);
     private final PaymentRepository paymentRepository;
-    private final EventRepository eventRepository;
-    private final NotificationService notificationService;
+    private final EmailNotificationService emailNotificationService;
+
+    public PaymentProcessor(PaymentRepository paymentRepository, EmailNotificationService emailNotificationService){
+        this.paymentRepository = paymentRepository;
+        this.emailNotificationService = emailNotificationService;
+    }
 
     @Async
     public void processAsync(Payment payment) {
@@ -27,7 +31,7 @@ public class PaymentProcessor {
             paymentRepository.save(payment);
 
             // Envia notificação
-            notificationService.sendPaymentConfirmation(
+            emailNotificationService.sendPaymentConfirmation(
                     payment.getUser().getEmail(),
                     payment.getEvent().getTitle(),
                     payment.getAmount()

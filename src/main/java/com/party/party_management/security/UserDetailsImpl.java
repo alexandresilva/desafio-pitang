@@ -1,39 +1,49 @@
 package com.party.party_management.security;
 
-import lombok.Getter;
+import com.party.party_management.model.User;
+import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+@Builder
 public class UserDetailsImpl implements UserDetails {
 
-    @Getter
-    private Long id;
-
-    @Getter
-    private String email;
-
-    @Getter
+    private final Long id;
+    private final String email;
     private final String username;
-
-    @Getter
     private final String password;
-    private Collection<? extends GrantedAuthority> authorities;
+    private final Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(String username, String password,
+    public UserDetailsImpl(Long id, String email, String username, String password,
                            Collection<? extends GrantedAuthority> authorities) {
+        this.id = id;
+        this.email = email;
         this.username = username;
         this.password = password;
         this.authorities = authorities;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public static UserDetails build(User user) {
         return null;
     }
 
-    // Construtor, getters e métodos obrigatórios do UserDetails
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.authorities;  // Não retorne null!
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;  // Implementação necessária
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -52,5 +62,14 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    // Getters adicionais
+    public Long getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

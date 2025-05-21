@@ -12,15 +12,18 @@ import com.party.party_management.repository.EventRepository;
 import com.party.party_management.repository.PaymentRepository;
 import com.party.party_management.repository.UserRepository;
 import com.party.party_management.service.PaymentProcessor;
+import com.party.party_management.service.PaymentService;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class PaymentServiceImpl {
+@Service
+public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final EventRepository eventRepository;

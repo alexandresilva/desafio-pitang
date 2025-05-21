@@ -9,7 +9,9 @@ import com.party.party_management.model.User;
 import com.party.party_management.repository.EventRepository;
 import com.party.party_management.repository.UserRepository;
 import com.party.party_management.service.EventService;
-import lombok.extern.slf4j.Slf4j;
+import com.party.party_management.service.mock.MockNotificationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,9 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Slf4j
 @Service
 public class EventServiceImpl implements EventService {
+
+    private static final Logger log = LoggerFactory.getLogger(MockNotificationService.class);
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
 

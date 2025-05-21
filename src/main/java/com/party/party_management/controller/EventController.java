@@ -6,9 +6,7 @@ import com.party.party_management.dto.EventUpdateRequestDTO;
 import com.party.party_management.model.Event;
 import com.party.party_management.security.UserDetailsImpl;
 import com.party.party_management.service.EventService;
-import com.sun.jdi.request.EventRequest;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -19,10 +17,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/events")
-@RequiredArgsConstructor
 public class EventController {
 
     private final EventService eventService;
+
+    public EventController(EventService eventService){
+        this.eventService = eventService;
+    }
 
     @GetMapping
     public ResponseEntity<Page<EventResponseDTO>> getAllEvents(

@@ -8,7 +8,6 @@ import com.party.party_management.repository.UserRepository;
 import com.party.party_management.security.JwtUtils;
 import com.party.party_management.security.UserDetailsImpl;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@RequiredArgsConstructor
 public class AuthController {
 
     private final UserRepository userRepository;
@@ -33,26 +31,34 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
+    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder,
+                          AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
+    }
+
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequestDTO signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequestDTO signupRequestDTO) {
+        if (userRepository.existsByUsername(signupRequestDTO.getUsername())) {
             return ResponseEntity
                     .badRequest()
                     .body("Erro: Username já está em uso!");
         }
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userRepository.existsByEmail(signupRequestDTO.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body("Erro: Email já está em uso!");
         }
 
         User user = new User(
-                signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                signUpRequest.getFullName(),
-                passwordEncoder.encode(signUpRequest.getPassword()),
-                signUpRequest.getRole() != null ? signUpRequest.getRole() : "ROLE_USER"
+                signupRequestDTO.getUsername(),
+                signupRequestDTO.getEmail(),
+                signupRequestDTO.getFullName(),
+                passwordEncoder.encode(signupRequestDTO.getPassword()),
+                signupRequestDTO.getRole() != null ? signupRequestDTO.getRole() : "ROLE_USER"
         );
 
         userRepository.save(user);

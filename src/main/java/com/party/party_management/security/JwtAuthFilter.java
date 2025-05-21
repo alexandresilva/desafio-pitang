@@ -26,38 +26,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private UserDetailsServiceImpl userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
         try {
-            // 1. Extrair o token do cabeçalho Authorization
             String jwt = parseJwt(request);
-
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                // 2. Extrair username do token
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
-
-                // 3. Carregar dados do usuário
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-                // 4. Criar autenticação
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities());
-
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                // 5. Definir no contexto de segurança
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e);
         }
-
         filterChain.doFilter(request, response);
     }
 

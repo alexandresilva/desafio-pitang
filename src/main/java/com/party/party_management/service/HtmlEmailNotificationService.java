@@ -3,9 +3,6 @@ package com.party.party_management.service;
 import com.party.party_management.exception.NotificationException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -16,10 +13,14 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Service
-@RequiredArgsConstructor
 public class HtmlEmailNotificationService implements NotificationService {
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
+
+    public HtmlEmailNotificationService(JavaMailSender mailSender, TemplateEngine templateEngine){
+        this.mailSender = mailSender;
+        this.templateEngine = templateEngine;
+    }
 
     @Override
     public void sendPaymentConfirmation(String email, String eventTitle, BigDecimal amount)

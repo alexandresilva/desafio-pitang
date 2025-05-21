@@ -6,8 +6,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
 public class UserUpdateRequestDTO {
 
     @NotBlank(message = "Nome completo é obrigatório")
@@ -21,4 +19,28 @@ public class UserUpdateRequestDTO {
     // Campos opcionais para atualização
     @Size(min = 6, max = 20, message = "Senha deve ter entre 6 e 20 caracteres")
     private String password;
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
