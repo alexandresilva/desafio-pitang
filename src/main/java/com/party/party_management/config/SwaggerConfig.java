@@ -20,6 +20,6 @@ public class SwaggerConfig {
 						.description("API para gerenciamento de eventos e pagamentos")
 						.contact(new Contact()
 								.name("Suporte")
-								.email("suporte@partymanagement.com")));
+								.email("pitang@partymanagement.com")));
 	}
 }
