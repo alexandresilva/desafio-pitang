@@ -50,11 +50,11 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/v3/api-docs"
                         ).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/events/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/events/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/v1/events/{eventId}/attend").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/events/{eventId}/attend").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

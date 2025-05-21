@@ -1,5 +1,8 @@
 server:
   port: 8081
+  error:
+    include-message: always
+    include-binding-errors: always
 
 app:
   jwt:
@@ -60,3 +63,19 @@ springdoc:
   #        auth: true
   #        starttls:
   #          enable: true
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        security: DEBUG
+        web: TRACE
+        data: INFO
+        boot: INFO
+      hibernate: INFO
+  file:
+    name: logs/app.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

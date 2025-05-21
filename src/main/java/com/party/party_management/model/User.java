@@ -8,13 +8,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
 @Entity
 @Table(name = "users")
-@NoArgsConstructor
+@Builder
 public class User {
 
     @Id
@@ -46,6 +47,15 @@ public class User {
     private String tags;
 
     public User(String username, String email, String fullName, String encode, String s) {
+    }
+
+    // Construtor padrão
+    public User() {}
+
+    // Construtor com campos obrigatórios
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
     public Long getId() {

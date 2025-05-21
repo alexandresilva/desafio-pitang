@@ -11,4 +11,10 @@ mundo Java. A aplicação deve ser escalável, flexível e tolerante a falhas.
 
 ### Endpoints
 
-The following guides illustrate how to use some features concretely:
+* [Listar todos os eventos disponíveis](http://localhost:8081/api/v1/events)
+* [Login](http://localhost:8081/api/v1/auth/login)
+
+### Banco de Dados
+* Rodar o docker-compose.yml para criar uma instância Docker com Postgres 11
+* Usuário: alexandre.pitang
+* Senha: 123456

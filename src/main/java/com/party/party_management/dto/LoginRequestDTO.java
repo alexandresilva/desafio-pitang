@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class LoginRequestDTO {
 	@NotBlank(message = "Username ou email é obrigatório")
 	private String usernameOrEmail;
@@ -31,6 +29,5 @@ public class LoginRequestDTO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 
 }

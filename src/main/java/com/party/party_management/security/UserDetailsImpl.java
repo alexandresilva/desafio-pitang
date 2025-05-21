@@ -3,9 +3,11 @@ package com.party.party_management.security;
 import com.party.party_management.model.User;
 import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 @Builder
 public class UserDetailsImpl implements UserDetails {
@@ -25,8 +27,18 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserDetails build(User user) {
-        return null;
+    public static UserDetailsImpl build(User user) {
+        List<GrantedAuthority> authorities = user.getRole() != null ?
+                List.of(new SimpleGrantedAuthority(user.getRole().getName().name())) :
+                List.of(new SimpleGrantedAuthority("ROLE_USER"));
+
+        return new UserDetailsImpl(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPassword(),
+                authorities
+        );
     }
 
     @Override
