@@ -6,6 +6,7 @@ import com.party.party_management.dto.EventUpdateRequestDTO;
 import com.party.party_management.model.Event;
 import com.party.party_management.security.UserDetailsImpl;
 import com.party.party_management.service.EventService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/events")
+@Tag(name = "Eventos", description = "Operações relacionadas ao cadastro de eventos")
 public class EventController {
 
     private final EventService eventService;

@@ -4,6 +4,7 @@ import com.party.party_management.dto.UserResponseDTO;
 import com.party.party_management.dto.UserUpdateRequestDTO;
 import com.party.party_management.model.User;
 import com.party.party_management.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@Tag(name = "Controle de Usuários", description = "Operações relacionadas ao cadastro de usuários")
 public class UserController {
 
     private final UserService userService;

@@ -1,4 +1,4 @@
-CREATE TABLE attendance (
+CREATE TABLE attendances (
                             id BIGSERIAL PRIMARY KEY,
                             event_id int4 NOT NULL,
                             user_id int4 NOT NULL,
@@ -7,11 +7,11 @@ CREATE TABLE attendance (
                             CONSTRAINT fk_attendance_user FOREIGN KEY (user_id) REFERENCES users(id),
                             CONSTRAINT uk_attendance_event_user UNIQUE (event_id, user_id)
 );
-CREATE INDEX idx_attendance_event ON attendance(event_id);
-CREATE INDEX idx_attendance_user ON attendance(user_id);
+CREATE INDEX idx_attendance_event ON attendances(event_id);
+CREATE INDEX idx_attendance_user ON attendances(user_id);
 
 
-CREATE TABLE payment (
+CREATE TABLE payments (
                          id BIGSERIAL PRIMARY KEY,
                          transaction_id VARCHAR(255) NOT NULL,
                          amount DECIMAL(19, 2) NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE payment (
                          CONSTRAINT fk_payment_event FOREIGN KEY (event_id) REFERENCES events(id),
                          CONSTRAINT fk_payment_user FOREIGN KEY (user_id) REFERENCES users(id)
 );
-CREATE INDEX idx_payment_transaction ON payment(transaction_id);
-CREATE INDEX idx_payment_event ON payment(event_id);
-CREATE INDEX idx_payment_user ON payment(user_id);
-CREATE INDEX idx_payment_status ON payment(status);
+CREATE INDEX idx_payment_transaction ON payments(transaction_id);
+CREATE INDEX idx_payment_event ON payments(event_id);
+CREATE INDEX idx_payment_user ON payments(user_id);
+CREATE INDEX idx_payment_status ON payments(status);

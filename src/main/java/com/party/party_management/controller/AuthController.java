@@ -7,6 +7,7 @@ import com.party.party_management.model.User;
 import com.party.party_management.repository.UserRepository;
 import com.party.party_management.security.JwtUtils;
 import com.party.party_management.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@Tag(name = "Autenticação", description = "Operações relacionadas a autenticação")
 public class AuthController {
 
     private final UserRepository userRepository;

@@ -27,7 +27,7 @@ public class Event {
     private String description;
 
     // Tipo específico do PostgreSQL para geolocalização
-    @Column(columnDefinition = "POINT")
+    @Column(columnDefinition = "TEXT")
     private String location;
 
     @Column(name = "start_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
@@ -47,6 +47,7 @@ public class Event {
     @Column(columnDefinition = "jsonb")
     private String metadata;
 
+    @Column(name = "deleted")
     private boolean deleted = false;
 
     @Column(name = "deleted_at")
