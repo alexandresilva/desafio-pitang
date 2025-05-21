@@ -4,6 +4,9 @@ import com.party.party_management.dto.PaymentRequestDTO;
 import com.party.party_management.dto.PaymentResponseDTO;
 import com.party.party_management.security.UserDetailsImpl;
 import com.party.party_management.service.PaymentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/payments")
+@Tag(name = "Pagamentos", description = "Operações relacionadas a pagamentos")
 public class PaymentController {
 
     private final PaymentService paymentService;
@@ -31,6 +35,8 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
+    @Operation(summary = "Listar pagamentos", description = "Retorna pagamentos com filtros opcionais")
+    @ApiResponse(responseCode = "200", description = "Pagamentos encontrados")
     @GetMapping
     public ResponseEntity<List<PaymentResponseDTO>> getAllPayments(
             @RequestParam(required = false) String status,

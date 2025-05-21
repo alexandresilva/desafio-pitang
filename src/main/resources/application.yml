@@ -34,13 +34,21 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-
   task:
     execution:
       pool:
         core-size: 5
         max-size: 10
         queue-capacity: 100
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  default-produces-media-type: application/json
 
   # Configurações de Email
   #mail:
