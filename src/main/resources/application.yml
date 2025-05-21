@@ -6,8 +6,8 @@ server:
 
 app:
   jwt:
-    secret: YDXmzA0pfWGr5GxizbA7NdGQrusADUvZm9dDw8jzqpo= # usar comando 'openssl rand -base64 32' para gerar token
-    expirationMs: 86400000 # 24 horas em milissegundos
+    secret: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.5Xnwnka59mxsFFvvUSa0Q_V9Oi7tc3oCk5TJeYzNPCYiC8UxKXnRdFYn7f4kY1CNdqTrVYbSNvqqP1kq6WPDDQ
+    expirationMs: 864000000
 
 spring:
   datasource:

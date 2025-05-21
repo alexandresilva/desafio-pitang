@@ -26,7 +26,7 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         List<User> users = userService.findAllUsers();

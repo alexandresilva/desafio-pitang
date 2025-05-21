@@ -62,4 +62,8 @@ public class JwtUtils {
 
         return false;
     }
+
+    public String getJwtSecret() {
+        return jwtSecret;
+    }
 }
