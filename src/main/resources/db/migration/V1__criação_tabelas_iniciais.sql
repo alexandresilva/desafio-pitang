@@ -23,6 +23,10 @@ INSERT INTO users (email, username, "password", full_name, role_id, created_at, 
 VALUES ('teste@gmail.com', 'alexandre.pitang','$2a$12$I0O9..BbVeniB2y1MQj/4eZ54FN02kKI6n9lms4MzM.wE9LVOX6j2'
 ,'Alexandre Oliveira Teste', 2,'2025-05-20 18:24:44.492977-03',null);
 
+INSERT INTO users (email, username, "password", full_name, role_id, created_at, tags)
+VALUES ('alissonteste@gmail.com', 'alisson.pitang','$2a$12$Xu1y3z5w7v9A1B3C5D7E.8G9H0J2K4L6M8N0P1Q3R4T5U6V7W8X9Y0Z'
+,'Alisson Oliveira Teste', 2, CURRENT_TIMESTAMP, null);
+
 
 CREATE TABLE events (
                         id BIGSERIAL PRIMARY KEY,
