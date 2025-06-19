@@ -69,6 +69,19 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(convertToUserResponse(savedUser));
     }
+    
+    @GetMapping("/username/{username}")
+    public ResponseEntity<UserResponseDTO> getUserByUsername(@PathVariable String username) {
+    	
+    	User user = userService.findByUsername(username);
+    	
+    	if (user == null) {
+    		
+    		return ResponseEntity.notFound().build();
+    	}
+    	
+    	return ResponseEntity.ok(convertToUserResponse(user));
+    }
 
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

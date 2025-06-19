@@ -13,6 +13,7 @@ public interface UserService {
     User findByUsername(String username);
     User createUser(User user);
     User updateUser(User user);
+    User findByUsername(String username);
     Role findRoleById(Long roleId);
     void deleteUser(Long id);
 }
