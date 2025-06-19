@@ -6,7 +6,7 @@ server:
 
 app:
   jwt:
-    secret: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFsZXhhbmRyZSBPbGl2ZWlyYSIsImFkbWluIjp0cnVlLCJpYXQiOjE1MTYyMzkwMjJ9.JN73_eUxeGbFogp7BkpQ-3OtHEXj-hk1_BiRvzArlGqRKC9hfRj5S1b3LqjrzxsDIq9kyWLiQ8fk2MZGtLUiJg
+    secret: i5qeaxblbQ6lPJqtD36HKNZXc4Gu0SKv9dIBnj7DQ6/jgur4Nedg3HQizzqC7dcwDvNAMqFcqzQ+WHULOngTow==
     expirationMs: 864000000
 
 spring:

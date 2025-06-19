@@ -1,5 +1,6 @@
 package com.party.party_management.service;
 
+import com.party.party_management.model.Role;
 import com.party.party_management.model.User;
 import org.springframework.stereotype.Service;
 
@@ -11,5 +12,6 @@ public interface UserService {
     User findById(Long id);
     User createUser(User user);
     User updateUser(User user);
+    Role findRoleById(Long roleId);
     void deleteUser(Long id);
 }
