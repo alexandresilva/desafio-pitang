@@ -5,8 +5,12 @@ import com.party.party_management.model.Role;
 import com.party.party_management.model.User;
 import com.party.party_management.repository.RoleRepository;
 import com.party.party_management.repository.UserRepository;
+import com.party.party_management.security.UserDetailsImpl;
 import com.party.party_management.service.UserService;
 
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +41,12 @@ public class UserServiceImpl implements UserService {
 	public User findById(Long id) {
 		return userRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Usuário com id [" + id + "] não encontrado : "));
+	}
+
+	@Override
+	public User findByUsername(String username) {
+		return userRepository.findByUsernameOrEmail(username)
+				.orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado! "));
 	}
 
 	@Override

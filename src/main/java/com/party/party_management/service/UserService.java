@@ -10,6 +10,7 @@ import java.util.List;
 public interface UserService {
     List<User> findAllUsers();
     User findById(Long id);
+    User findByUsername(String username);
     User createUser(User user);
     User updateUser(User user);
     Role findRoleById(Long roleId);

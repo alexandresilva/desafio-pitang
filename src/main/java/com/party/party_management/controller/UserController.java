@@ -131,6 +131,12 @@ public class UserController {
         );
     }
 
+    @GetMapping("/username/{username}")
+    public ResponseEntity<UserResponseDTO> getUserByUserName(@PathVariable String username) {
+        User user = userService.findByUsername(username);
+        return ResponseEntity.ok(convertToUserResponse(user));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         Long currentUserId = SecurityUtil.getCurrentUserId();
