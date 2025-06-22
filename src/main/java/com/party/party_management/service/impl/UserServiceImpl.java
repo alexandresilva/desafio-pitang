@@ -58,11 +58,6 @@ public class UserServiceImpl implements UserService {
 	public User updateUser(User user) {
 		return userRepository.save(user);
 	}
-	
-	@Override
-	public User findByUsername(String username) {
-	    return userRepository.findByUsername(username).orElse(null);
-	}
 
 	@Override
 	@Transactional

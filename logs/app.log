@@ -3586,3 +3586,7 @@ Identify and stop the process that's listening on port 8081 or configure this ap
 2025-06-19 20:48:19 [http-nio-8081-exec-8] TRACE o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[com.party.party_management.dto.UserResponseDTO@3bd5a553, com.party.party_management.dto.UserResponseDTO@45993433, com.party.party_management.dto.UserResponseDTO@270b2beb, com.party.party_management.dto.UserResponseDTO@2ec1b0c0, com.party.party_management.dto.UserResponseDTO@38a86776, com.party.party_management.dto.UserResponseDTO@349cf4fc]]
 2025-06-19 20:48:19 [http-nio-8081-exec-8] TRACE o.s.web.servlet.DispatcherServlet - No view rendering, null ModelAndView returned.
 2025-06-19 20:48:19 [http-nio-8081-exec-8] DEBUG o.s.web.servlet.DispatcherServlet - Completed 200 OK, headers={masked}
+2025-06-19 21:05:43 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 5 class path changes (0 additions, 0 deletions, 5 modifications)
+2025-06-19 21:05:43 [Thread-5] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-19 21:05:43 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-06-19 21:05:43 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

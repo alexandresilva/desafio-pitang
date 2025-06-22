@@ -69,20 +69,6 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(convertToUserResponse(savedUser));
     }
-    
-    @GetMapping("/username/{username}")
-    public ResponseEntity<UserResponseDTO> getUserByUsername(@PathVariable String username) {
-    	
-    	User user = userService.findByUsername(username);
-    	
-    	if (user == null) {
-    		
-    		return ResponseEntity.notFound().build();
-    	}
-    	
-    	return ResponseEntity.ok(convertToUserResponse(user));
-    }
-
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
@@ -95,12 +81,13 @@ public class UserController {
     }
 
     private UserResponseDTO convertToDto(User user) {
-        return new UserResponseDTO(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRole()
-        );
+    	 return new UserResponseDTO(
+    		        user.getId(),
+    		        user.getUsername(),
+    		        user.getEmail(),
+    		        user.getFullName(),  // <-- adiciona aqui!
+    		        user.getRole()
+    			 );
     }
 
     @GetMapping("/{id}")
