@@ -136,7 +136,8 @@ public class UserController {
         User user = userService.findByUsername(username);
         return ResponseEntity.ok(convertToUserResponse(user));
     }
-
+    
+    @PreAuthorize("#id == principal.id or hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         Long currentUserId = SecurityUtil.getCurrentUserId();
@@ -149,7 +150,4 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
-
-
-
 }

@@ -10,11 +10,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Builder;
 
 @Entity
 @Table(name = "users")
-@Builder
 public class User {
 
     @Id
@@ -33,30 +31,37 @@ public class User {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    // PostgreSQL enum type
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    // PostgreSQL specific types
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP")
     private Instant createdAt;
 
-    // Array type do PostgreSQL
     private String tags;
 
-    public User(String username, String email, String fullName, String encode, String s) {
-    }
+    // ❌ REMOVIDO: public User(String username, String email, String fullName, String encode, String s) {}
 
-    // Construtor padrão
+    // ✅ Construtor padrão (obrigatório para JPA)
     public User() {}
 
-    // Construtor com campos obrigatórios
+    // ✅ Construtor com campos básicos
     public User(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
+    // ✅ Construtor para signup (usado no AuthController)
+    public User(String username, String email, String fullName, String password, String roleString) {
+        this.username = username;
+        this.email = email;
+        this.fullName = fullName;
+        this.password = password;
+        // Nota: roleString não é usado aqui pois role é uma entidade separada
+        // O AuthController precisará ser ajustado para definir a role corretamente
+    }
+
+    // Getters e setters (mantidos iguais)
     public Long getId() {
         return id;
     }
