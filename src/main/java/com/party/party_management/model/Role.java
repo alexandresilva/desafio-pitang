@@ -21,22 +21,21 @@ public class Role {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(unique = true, nullable = false, length = 20)
+    @Column(unique = true, nullable = false, length = 30)
     private RoleType name;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public Role(Long id, RoleType name) {
         this.id = id;
-    }
-
-    public RoleType getName() {
-        return name;
-    }
-
-    public void setName(RoleType name) {
         this.name = name;
     }
+    
+    // ✅ Construtor padrão obrigatório para o Hibernate
+    public Role() {
+    }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public RoleType getName() { return name; }
+    public void setName(RoleType name) { this.name = name; }
 }

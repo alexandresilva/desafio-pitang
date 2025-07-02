@@ -63,6 +63,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/v1/users/*").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").authenticated()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
