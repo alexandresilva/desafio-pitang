@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200") // ou o domínio do frontend
 public class ChatController {
 
     @Autowired
@@ -26,12 +26,13 @@ public class ChatController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    // Enviar mensagem via WebSocket
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
-        // Salvar mensagem no banco de dados
+        // Salvar mensagem no banco de dados (supondo que você tenha um método para isso)
         ChatMessage savedMessage = chatService.saveMessage(chatMessage);
+        
+        // Retornar a mensagem salva para os clientes
         return savedMessage;
     }
 
@@ -40,11 +41,11 @@ public class ChatController {
     @SendTo("/topic/public")
     public ChatMessage addUser(@Payload ChatMessage chatMessage, 
                               SimpMessageHeaderAccessor headerAccessor) {
-        // Adicionar username na sessão websocket
+        // Adicionar username na sessão WebSocket
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSenderName());
         headerAccessor.getSessionAttributes().put("userId", chatMessage.getSenderId());
         
-        // Criar mensagem de sistema
+        // Criar uma mensagem de sistema
         ChatMessage systemMessage = new ChatMessage(
             chatMessage.getSenderName() + " entrou no chat!", 
             "system", 
@@ -58,6 +59,7 @@ public class ChatController {
         
         return systemMessage;
     }
+
     
     // Indicador de digitação
     @MessageMapping("/chat.typing")
@@ -104,5 +106,11 @@ public class ChatController {
             "messagesLastHour", chatService.getMessagesLastHour(),
             "activeUsers", chatService.getActiveUsersLast24Hours()
         );
+    }
+    
+    @PostMapping("/api/chat/send")
+    @ResponseBody
+    public ChatMessage sendMessageViaRest(@RequestBody ChatMessage chatMessage) {
+        return chatService.saveMessage(chatMessage);
     }
 }

@@ -26,7 +26,14 @@ public class WebSocketEventListener {
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-        logger.info("Nova conexão WebSocket estabelecida");
+        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+        
+        // Obtém o username - você pode configurar para obter dinamicamente via login
+        String username = "usuario1";  // Exemplo fixo
+
+        headerAccessor.getSessionAttributes().put("username", username);
+        
+        logger.info("Nova conexão WebSocket estabelecida para o usuário: {}", username);
         chatService.incrementUserCount();
         
         // Enviar contagem atualizada para todos os clientes
@@ -40,19 +47,10 @@ public class WebSocketEventListener {
         String username = (String) headerAccessor.getSessionAttributes().get("username");
         if (username != null) {
             logger.info("Usuário desconectado: {}", username);
-            
-            // Decrementar contador de usuários
             chatService.decrementUserCount();
             
-            // Criar mensagem de sistema informando saída do usuário
-            ChatMessage chatMessage = new ChatMessage(
-                username + " saiu do chat!", 
-                "system", 
-                "Sistema",
-                ChatMessage.MessageType.SYSTEM
-            );
-            
-            // Enviar mensagem para todos os clientes
+            // Enviar mensagem de sistema quando alguém sair
+            ChatMessage chatMessage = new ChatMessage(username + " saiu do chat!", "system", "Sistema", ChatMessage.MessageType.SYSTEM);
             messagingTemplate.convertAndSend("/topic/public", chatMessage);
             
             // Enviar contagem atualizada para todos os clientes
@@ -60,3 +58,4 @@ public class WebSocketEventListener {
         }
     }
 }
+	
