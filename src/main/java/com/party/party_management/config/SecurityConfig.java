@@ -46,10 +46,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource)) // Adicione esta linha
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Adicione esta linha para OPTIONS
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // Configurações específicas do Socket.IO
+                        .requestMatchers("/socket.io/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers("/app/**").permitAll()
+                        .requestMatchers("/topic/**").permitAll()
+                        .requestMatchers("/queue/**").permitAll()
+                        // Padrões adicionais do Socket.IO
+                        .requestMatchers("/socket.io/").permitAll()
+                        .requestMatchers("/socket.io/?**").permitAll()
+                        .requestMatchers("/socket.io/*").permitAll()
+                        // Resto da configuração...
                         .requestMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",

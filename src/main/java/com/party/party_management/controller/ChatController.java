@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/ws")
 @CrossOrigin(origins = "http://localhost:4200") // ou o domínio do frontend
 public class ChatController {
 
