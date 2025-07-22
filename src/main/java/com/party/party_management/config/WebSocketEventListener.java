@@ -7,11 +7,17 @@ import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import com.party.party_management.model.ChatMessage;
 import com.party.party_management.service.ChatService;
+import com.party.party_management.service.ConnectedUserService;
+
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class WebSocketEventListener {
@@ -22,40 +28,63 @@ public class WebSocketEventListener {
     private SimpMessageSendingOperations messagingTemplate;
 
     @Autowired
-    private ChatService chatService;
+    private ConnectedUserService connectedUserService;
 
     @EventListener
-    public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-        
-        // Obtém o username - você pode configurar para obter dinamicamente via login
-        String username = "usuario1";  // Exemplo fixo
+    public void handleWebSocketConnectListener(SessionConnectEvent event) {
+        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
 
-        headerAccessor.getSessionAttributes().put("username", username);
-        
-        logger.info("Nova conexão WebSocket estabelecida para o usuário: {}", username);
-        chatService.incrementUserCount();
-        
-        // Enviar contagem atualizada para todos os clientes
-        messagingTemplate.convertAndSend("/topic/userCount", chatService.getConnectedUsersCount());
+        List<String> userIdHeader = accessor.getNativeHeader("userId");
+        List<String> userNameHeader = accessor.getNativeHeader("userName");
+
+        String userId = userIdHeader != null && !userIdHeader.isEmpty() ? userIdHeader.get(0) : null;
+        String userName = userNameHeader != null && !userNameHeader.isEmpty() ? userNameHeader.get(0) : null;
+
+        if (accessor.getSessionAttributes() != null) {
+            accessor.getSessionAttributes().put("userId", userId);
+            accessor.getSessionAttributes().put("username", userName);
+        }
+
+        // Salvar userId na sua ConnectedUserService
+        if (userId != null) {
+            connectedUserService.addUser(userId);
+        }
+
+        // Enviar nova contagem para todos
+        messagingTemplate.convertAndSend("/topic/userCount", connectedUserService.getConnectedUserCount());
     }
+
 
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
-        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-        
-        String username = (String) headerAccessor.getSessionAttributes().get("username");
+        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
+        Map<String, Object> sessionAttributes = accessor.getSessionAttributes();
+
+        String username = (String) sessionAttributes.get("username");
+        String userId = (String) sessionAttributes.get("userId");
+
+        if (userId != null) {
+            logger.info("Removendo usuário com ID: {}", userId);
+            connectedUserService.removeUser(userId);
+        }
+
         if (username != null) {
             logger.info("Usuário desconectado: {}", username);
-            chatService.decrementUserCount();
-            
-            // Enviar mensagem de sistema quando alguém sair
-            ChatMessage chatMessage = new ChatMessage(username + " saiu do chat!", "system", "Sistema", ChatMessage.MessageType.SYSTEM);
+            ChatMessage chatMessage = new ChatMessage(
+                username + " saiu do chat!",
+                "system",
+                "Sistema",
+                ChatMessage.MessageType.SYSTEM
+            );
             messagingTemplate.convertAndSend("/topic/public", chatMessage);
-            
-            // Enviar contagem atualizada para todos os clientes
-            messagingTemplate.convertAndSend("/topic/userCount", chatService.getConnectedUsersCount());
         }
+
+        // Enviar contagem atualizada
+        messagingTemplate.convertAndSend("/topic/userCount", connectedUserService.getConnectedUserCount());
+        logger.info("Usuários conectados após desconexão: {}", connectedUserService.getConnectedUserCount());
     }
+
+
+
+
 }
-	

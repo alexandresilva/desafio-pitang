@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.party.party_management.model.ChatMessage;
 import com.party.party_management.service.ChatService;
+import com.party.party_management.service.ConnectedUserService;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,15 @@ public class ChatController {
     
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+    
+    @Autowired
+    private ConnectedUserService connectedUserService; // Ex: onde você mantém os usuários online
+    
+    @MessageMapping("/chat.getUserCount")
+    public void handleUserCountRequest(Principal principal) {
+        int count = connectedUserService.getConnectedUserCount();
+        messagingTemplate.convertAndSend("/topic/userCount", count);
+    }
 
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
@@ -41,25 +52,26 @@ public class ChatController {
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/public")
     public ChatMessage addUser(@Payload ChatMessage chatMessage, 
-                              SimpMessageHeaderAccessor headerAccessor) {
-        // Adicionar username na sessão WebSocket
-        headerAccessor.getSessionAttributes().put("username", chatMessage.getSenderName());
-        headerAccessor.getSessionAttributes().put("userId", chatMessage.getSenderId());
-        
-        // Criar uma mensagem de sistema
-        ChatMessage systemMessage = new ChatMessage(
-            chatMessage.getSenderName() + " entrou no chat!", 
-            "system", 
-            "Sistema",
-            ChatMessage.MessageType.SYSTEM
-        );
-        
-        // Atualizar contagem de usuários
-        chatService.incrementUserCount();
-        messagingTemplate.convertAndSend("/topic/userCount", chatService.getConnectedUsersCount());
-        
-        return systemMessage;
+                               SimpMessageHeaderAccessor headerAccessor) {
+        try {
+            headerAccessor.getSessionAttributes().put("username", chatMessage.getSenderName());
+            headerAccessor.getSessionAttributes().put("userId", chatMessage.getSenderId());
+
+            chatService.incrementUserCount();
+            messagingTemplate.convertAndSend("/topic/userCount", chatService.getConnectedUsersCount());
+
+            return new ChatMessage(
+                chatMessage.getSenderName() + " entrou no chat!",
+                "system",
+                "Sistema",
+                ChatMessage.MessageType.SYSTEM
+            );
+        } catch (Exception e) {
+            e.printStackTrace(); // imprime no console do Spring
+            throw e; // lança para o STOMP tratar e desconectar
+        }
     }
+
 
     
     // Indicador de digitação
