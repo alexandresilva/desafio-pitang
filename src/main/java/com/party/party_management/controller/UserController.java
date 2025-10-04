@@ -81,13 +81,31 @@ public class UserController {
     }
 
     private UserResponseDTO convertToDto(User user) {
-    	 return new UserResponseDTO(
-    		        user.getId(),
-    		        user.getUsername(),
-    		        user.getEmail(),
-    		        user.getFullName(),  // <-- adiciona aqui!
-    		        user.getRole()
-    			 );
+        return new UserResponseDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getFullName(),
+                user.getRole(),
+                // 🎯 CORREÇÃO: Converte o Enum para String usando .name()
+                user.getStatus() != null ? user.getStatus().name() : "OFFLINE"
+        );
+    }
+    
+    private UserResponseDTO convertToUserResponse(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("Usuário não pode ser nulo");
+        }
+        
+        return new UserResponseDTO(
+            user.getId(),
+            user.getUsername(),
+            user.getEmail(),
+            user.getFullName(),
+            user.getRole(),
+            user.getCreatedAt(),
+            user.getStatus() != null ? user.getStatus().name() : "OFFLINE"
+        );
     }
 
     @GetMapping("/{id}")
@@ -114,21 +132,6 @@ public class UserController {
         User updatedUser = userService.updateUser(user);
 
         return ResponseEntity.ok(convertToUserResponse(updatedUser));
-    }
-
-    private UserResponseDTO convertToUserResponse(User user) {
-        if (user == null) {
-            throw new IllegalArgumentException("Usuário não pode ser nulo");
-        }
-        
-        return new UserResponseDTO(
-            user.getId(),
-            user.getUsername(),
-            user.getEmail(),
-            user.getFullName(),
-            user.getRole(),
-            user.getCreatedAt()
-        );
     }
 
     @GetMapping("/username/{username}")

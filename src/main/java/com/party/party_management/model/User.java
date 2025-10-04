@@ -2,8 +2,12 @@ package com.party.party_management.model;
 
 import java.time.Instant;
 
+import com.party.party_management.enumerate.UserStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,6 +22,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Enumerated(EnumType.STRING) // Garante que o valor da enum seja armazenado como String (ONLINE, OFFLINE) no DB
+    private UserStatus status;
 
     @Column(unique = true, nullable = false)
     private String username;
@@ -40,10 +47,11 @@ public class User {
 
     private String tags;
 
-    // ❌ REMOVIDO: public User(String username, String email, String fullName, String encode, String s) {}
-
     // ✅ Construtor padrão (obrigatório para JPA)
-    public User() {}
+    public User() {
+        // Inicializa o status para OFFLINE por padrão
+        this.status = UserStatus.OFFLINE; 
+    }
 
     // ✅ Construtor com campos básicos
     public User(String username, String password) {
@@ -57,6 +65,7 @@ public class User {
         this.email = email;
         this.fullName = fullName;
         this.password = password;
+        this.status = UserStatus.OFFLINE; // Novo usuário começa offline
         // Nota: roleString não é usado aqui pois role é uma entidade separada
         // O AuthController precisará ser ajustado para definir a role corretamente
     }
@@ -69,7 +78,15 @@ public class User {
     public void setId(Long id) {
         this.id = id;
     }
-
+    
+    public UserStatus getStatus() {
+    	return status;
+    }
+    
+    public void setStatus(UserStatus status) {
+    	this.status = status;
+    }
+ 
     public String getUsername() {
         return username;
     }

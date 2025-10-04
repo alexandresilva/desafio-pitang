@@ -3,11 +3,14 @@ package com.party.party_management.controller;
 import com.party.party_management.dto.JwtResponseDTO;
 import com.party.party_management.dto.LoginRequestDTO;
 import com.party.party_management.dto.SignupRequestDTO;
+import com.party.party_management.enumerate.UserStatus;
 import com.party.party_management.model.User;
 import com.party.party_management.repository.UserRepository;
 import com.party.party_management.security.JwtUtils;
 import com.party.party_management.security.UserDetailsImpl;
 import com.party.party_management.security.UserDetailsServiceImpl;
+import com.party.party_management.service.UserService;
+
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -46,12 +49,16 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
+    private final UserService userService; // 🎯 NOVO: Declarar o UserService
+
     public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                          AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+                          AuthenticationManager authenticationManager, JwtUtils jwtUtils, UserService userService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
+        this.userService = userService; // 🎯 NOVO: Atribuir
+
     }
 
     @PostMapping("/signup")
@@ -105,6 +112,9 @@ public class AuthController {
             String jwt = jwtUtils.generateJwtToken(authentication);
 
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            
+            userService.updateStatus(userDetails.getId(), UserStatus.ONLINE); 
+
 
             return ResponseEntity.ok(new JwtResponseDTO(
                     jwt,

@@ -1,5 +1,6 @@
 package com.party.party_management.service.impl;
 
+import com.party.party_management.enumerate.UserStatus;
 import com.party.party_management.exception.ResourceNotFoundException;
 import com.party.party_management.model.Role;
 import com.party.party_management.model.User;
@@ -71,6 +72,13 @@ public class UserServiceImpl implements UserService {
 	public Role findRoleById(Long id) {
 	    return roleRepository.findById(id)
 	        .orElseThrow(() -> new ResourceNotFoundException("Role com id [" + id + "] não encontrada"));
+	}
+
+	@Override
+	public User updateStatus(Long userId, UserStatus status) {
+		User user = findById(userId); 
+	    user.setStatus(status);
+	    return userRepository.save(user);
 	}
 
 }

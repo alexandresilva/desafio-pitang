@@ -11,26 +11,31 @@ public class UserResponseDTO {
     private String fullName;
     private Role role;
     private Instant createdAt;
+    private String status; 
+
 
     // Construtor
-    public UserResponseDTO(Long id, String username, String email, String fullName, Role role, Instant createdAt) {
+    public UserResponseDTO(Long id, String username, String email, String fullName, Role role, Instant createdAt, String status) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.fullName = fullName;
         this.role = role;
         this.createdAt = createdAt;
+        this.status = status;
     }
 
     public UserResponseDTO(){
     }
 
-    public UserResponseDTO(Long id, String username, String email, String fullName, Role role) {
+    public UserResponseDTO(Long id, String username, String email, String fullName, Role role, String status) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.fullName = fullName;
         this.role = role;
+        this.status = status;
+
     }
 
     public Long getId() {
@@ -39,6 +44,14 @@ public class UserResponseDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+    
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getUsername() {
